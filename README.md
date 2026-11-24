@@ -1,97 +1,132 @@
-# ThinDesk
+# ThinDesk — Controle de chamados técnicos
 
-Projeto de atendimento t�cnico com uma API REST para abertura, consulta e resolu��o de chamados. A API de chamados est� integrada � aplica��o Spring Boot do ThinDesk.
+Sistema corporativo de atendimento técnico desenvolvido com Java, Spring Boot, Spring Security, Thymeleaf e MongoDB. Permite autenticar, abrir chamados, acompanhar solicitações e registrar sua resolução.
 
-## Tecnologias
+## Aplicação publicada e login de demonstração
 
-- Java 23
-- Spring Boot 3.4.0
-- Spring Web e Spring Security
-- Spring Data MongoDB
-- MongoDB
-- Thymeleaf para as p�ginas existentes do sistema
-- Maven Wrapper
+**Acesse:** [ThinDesk online](https://thindesk-production-732de546.up.railway.app/login)
 
-## Executar localmente
+| Campo | Credencial de demonstração |
+| --- | --- |
+| Usuário | `admin` |
+| Senha | `thindesk` |
 
-Pr�-requisitos: JDK 23 e uma inst�ncia MongoDB acess�vel.
+Qualquer pessoa com o link pode acessar com essas credenciais. Não é necessário criar conta no Railway ou no GitHub para usar a aplicação. O acesso é compartilhado e destinado à avaliação acadêmica: utilize apenas informações fictícias.
 
-1. Inicie o MongoDB local na porta padr�o `27017`.
-2. No terminal, na raiz do projeto, execute:
+## Versionamento semântico
 
-   ```powershell
-   .\mvnw.cmd spring-boot:run
-   ```
+**Versão atual: `1.1.0-beta.1`**, declarada também no `pom.xml` e na interface do sistema.
 
-Por padr�o, a aplica��o usa `mongodb://localhost:27017/thindesk`. Para configurar outra URI, defina a vari�vel de ambiente `MONGODB_URI` antes de iniciar a aplica��o.
+O projeto adota o formato **MAJOR.MINOR.PATCH[-PRÉ-LANÇAMENTO]**, de acordo com o [Semantic Versioning 2.0.0](https://semver.org/lang/pt-BR/):
 
-A aplica��o fica dispon�vel em `http://localhost:8080`. A tela de login fica em `http://localhost:8080/login`.
-
-### Acesso de demonstra��o
-
-O `application.properties` define o usu�rio de demonstra��o `admin` e a senha `thindesk`. Troque essas credenciais antes de usar o projeto em um ambiente compartilhado ou de produ��o.
-
-## API de chamados
-
-As rotas da API exigem autentica��o pela sess�o do Spring Security. Ao abrir ou resolver um chamado, o sistema usa o usu�rio autenticado para preencher o solicitante ou o t�cnico.
-
-| M�todo | Rota | Descri��o |
+| Parte | Valor atual | Significado |
 | --- | --- | --- |
-| `POST` | `/api/chamados` | Abre um chamado |
-| `GET` | `/api/chamados/usuario/{id}` | Lista chamados do usu�rio |
-| `GET` | `/api/chamados/{id}` | Consulta um chamado pelo ID |
-| `PUT` | `/api/chamados/{id}/resolver` | Registra a solu��o e resolve um chamado |
+| MAJOR | `1` | Linha principal do sistema; aumenta quando há mudanças incompatíveis. |
+| MINOR | `1` | Inclusão de funcionalidades compatíveis: dashboard e operação de chamados pela interface, preservando as rotas da API. |
+| PATCH | `0` | Nenhuma revisão corretiva publicada nesta linha `1.1`. As próximas correções sem novas funcionalidades usarão `1.1.1`, `1.1.2` etc. |
+| Pré-lançamento | `beta.1` | Primeira versão beta desta linha: disponível para avaliação e ainda sujeita a validação e melhorias. Não representa uma versão final de produção. |
 
-### Abrir chamado
+O código recebido utilizava `1.0-alpha`, que não contém os três componentes numéricos do SemVer. A entrega passa a padronizar a versão como `1.1.0-beta.1`. Exemplo de evolução: `1.1.0-beta.1` → `1.1.0-beta.2` → `1.1.0` → `1.1.1` → `1.2.0`; uma alteração incompatível deve avançar para `2.0.0`.
 
-`POST /api/chamados`
+## Dashboard
 
-```json
-{
-  "titulo": "Computador sem acesso � rede",
-  "descricao": "A esta��o n�o consegue acessar a rede."
-}
+![Dashboard real do ThinDesk](docs/dashboard.jpg)
+
+Captura realizada em 24/11/2026, às 17h41 (horário de Brasília), da aplicação executando o código deste repositório. A tela mostra o total de chamados, os chamados abertos e resolvidos, a taxa de resolução e as cinco solicitações mais recentes. Os indicadores são calculados a partir do MongoDB; os números podem mudar conforme o uso do acesso compartilhado.
+
+Quando o banco está vazio, a inicialização grava três exemplos fictícios, sendo dois abertos e um resolvido. Os registros de demonstração são identificados nas descrições. A carga inicial preserva os chamados existentes; a correção de acentuação se limita aos textos dos exemplos fictícios da primeira publicação.
+
+## Funcionalidades desta entrega
+
+- Login e logout com sessão do Spring Security.
+- Dashboard com indicadores obtidos dos chamados persistidos.
+- Abertura de chamados pela interface e pela API REST.
+- Consulta de chamados e registro da solução pelo usuário autenticado.
+- Bloqueio de uma segunda resolução do mesmo chamado.
+- Consulta de clientes cadastrados; o cadastro permanece disponível pela API.
+- Layout responsivo e dados de demonstração para avaliação.
+
+## Tecnologias e execução local
+
+- Java 21, Maven e Spring Boot 3.4.0.
+- Spring Web, Spring Security, Spring Data MongoDB e Thymeleaf.
+- MongoDB e Docker para a hospedagem.
+
+Pré-requisitos locais: JDK 21 e MongoDB na porta `27017`. Na raiz do projeto:
+
+```powershell
+.\mvnw.cmd spring-boot:run
 ```
 
-O servidor registra o solicitante autenticado, a data de abertura e o status inicial `ABERTO`. Em caso de sucesso, retorna `201 Created`.
+Abra `http://localhost:8080/login` e use o mesmo acesso de demonstração.
 
-### Listar chamados do usu�rio
+Para configurar outro banco:
 
-`GET /api/chamados/usuario/admin`
-
-No c�digo atual, o valor `{id}` dessa rota corresponde ao nome do usu�rio salvo no chamado (por exemplo, `admin`).
-
-### Consultar chamado
-
-`GET /api/chamados/{id}`
-
-Retorna os dados do chamado, incluindo status, solicitante, datas, solu��o e t�cnico, quando informados.
-
-### Resolver chamado
-
-`PUT /api/chamados/{id}/resolver`
-
-```json
-{
-  "solucao": "Reiniciada a interface de rede e validado o acesso."
-}
+```powershell
+$env:MONGODB_URI = 'mongodb://localhost:27017/thindesk'
+.\mvnw.cmd spring-boot:run
 ```
 
-Somente chamados `ABERTO` podem ser resolvidos. A resolu��o registra o usu�rio autenticado como t�cnico, a solu��o, a data e o status `RESOLVIDO`. Uma nova tentativa de resolver o mesmo chamado retorna `409 Conflict`.
+Para gerar o executável com Maven instalado:
 
-### Valida��es e respostas comuns
+```text
+mvn clean package
+java -jar target/thindesk.jar
+```
 
-- Campos obrigat�rios vazios: `400 Bad Request`.
-- Requisi��o sem autentica��o: `401 Unauthorized` nas rotas da API.
-- Chamado inexistente: `404 Not Found`.
-- Tentativa de resolver chamado que n�o est� aberto: `409 Conflict`.
+Os testes de integração precisam de MongoDB acessível durante a execução. A rotina em `.github/workflows/verify.yml` fornece um MongoDB isolado no GitHub Actions.
 
-Os chamados s�o persistidos na cole��o `chamados` do banco `thindesk`.
+## Deploy
 
-## Testar com Postman
+O deploy está configurado no Railway, com o serviço `thindesk` conectado à branch `main` deste repositório e o MongoDB com volume persistente. O `Dockerfile` compila o projeto e executa o JAR com Java 21. O `railway.toml` configura o build e a verificação de disponibilidade em `/login`.
 
-1. Inicie o MongoDB e a aplica��o.
-2. No Postman Desktop, importe `postman/ThinDesk-Chamados.postman_collection.json`.
-3. Execute a cole��o na ordem apresentada. A primeira requisi��o autentica e as seguintes usam a sess�o.
+| Variável | Finalidade |
+| --- | --- |
+| `MONGODB_URI` | Conexão privada com o serviço MongoDB (`${{MongoDB.MONGO_URL}}` no Railway). |
+| `PORT` | Porta fornecida pela hospedagem; localmente usa `8080`. |
+| `DEMO_USERNAME` | Usuário de demonstração; padrão `admin`. |
+| `DEMO_PASSWORD` | Senha de demonstração; padrão `thindesk`. |
 
-A cole��o percorre o login, a abertura, as consultas, a resolu��o, uma consulta posterior para confirmar os dados persistidos e uma tentativa de resolu��o duplicada. O `409 Conflict` da �ltima requisi��o � esperado e confirma a regra de bloqueio.
+A disponibilidade depende da manutenção dos serviços e dos limites/créditos da conta Railway. A credencial publicada é exclusiva deste ambiente acadêmico; uma implantação de produção exige contas individuais, política de acesso e revisão de segurança. A configuração original da API mantém CSRF desabilitado nesta versão beta.
+
+## API REST
+
+As rotas exigem uma sessão autenticada. Ao abrir ou resolver um chamado, o servidor utiliza o usuário da sessão como solicitante ou técnico.
+
+| Método | Rota | Descrição |
+| --- | --- | --- |
+| `POST` | `/api/chamados` | Abre um chamado com `titulo` e `descricao`. |
+| `GET` | `/api/chamados/usuario/{id}` | Lista chamados pelo nome do usuário, por exemplo `admin`. |
+| `GET` | `/api/chamados/{id}` | Consulta um chamado. |
+| `PUT` | `/api/chamados/{id}/resolver` | Resolve um chamado com o campo `solucao`. |
+
+Exemplo de abertura:
+
+```json
+{"titulo":"Computador sem rede","descricao":"Exemplo fictício: estação sem conexão."}
+```
+
+Exemplo de resolução:
+
+```json
+{"solucao":"Interface de rede reiniciada e acesso validado."}
+```
+
+Respostas previstas: `201` ao criar, `400` para campos obrigatórios ausentes, `401` sem autenticação nas APIs de chamados, `404` para chamado inexistente e `409` ao tentar resolver novamente um chamado concluído. Há uma coleção em `postman/ThinDesk-Chamados.postman_collection.json`.
+
+## Conferência da atividade
+
+| Requisito | Local da entrega |
+| --- | --- |
+| Versão e explicação do versionamento (1 ponto) | Seção “Versionamento semântico” deste README e `pom.xml`. |
+| Print de dashboard compatível com o ZIP (1 ponto) | Imagem `docs/dashboard.jpg` e código da tela em `src/main/resources/templates/home.html`. |
+| Aplicação publicada com login acessível (3 pontos) | Link e credenciais no início deste README. |
+
+Para entregar o código, baixe o ZIP atualizado da branch `main` deste repositório após a conclusão da documentação. O ZIP original recebido não inclui as alterações desta versão.
+
+
+## Validação
+
+A compilação e o teste de integração passaram no [GitHub Actions](https://github.com/ErickSantosBarbosa04/AleAtt23-10/actions/runs/45483182253), em 24/11/2026. O teste percorre o login válido e inválido, o bloqueio da API sem autenticação, a renderização do dashboard, a validação de campos, a abertura e consulta de chamado, a resolução persistida, o bloqueio de resolução duplicada e o logout.
+
+A validação manual no endereço publicado confirmou login, abertura de chamado, resolução e atualização dos indicadores do dashboard. O chamado fictício criado nessa verificação permanece como exemplo de atendimento concluído.
