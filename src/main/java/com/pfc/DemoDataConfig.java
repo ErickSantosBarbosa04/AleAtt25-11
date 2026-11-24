@@ -37,7 +37,9 @@ public class DemoDataConfig implements CommandLineRunner {
     private void corrigirExemplosComCodificacaoInvalida() {
         for (Chamado chamado : repository.findByUsuario("demo")) {
             String titulo = chamado.getTitulo();
-            if (titulo == null || !titulo.contains("\uFFFD")) continue;
+            String descricao = chamado.getDescricao();
+            if (titulo == null || (!titulo.contains("\uFFFD")
+                    && (descricao == null || !descricao.contains("\uFFFD")))) continue;
             if (titulo.startsWith("Impressora sem")) {
                 chamado.setTitulo("Impressora sem conexão");
                 chamado.setDescricao("Exemplo fictício: impressora do setor financeiro não conecta à rede.");
