@@ -19,6 +19,8 @@ As contas são persistidas no MongoDB. As senhas são armazenadas como hashes BC
 
 Este é um projeto acadêmico: utilize apenas dados fictícios nos chamados.
 
+![Tela pública de cadastro](docs/cadastro.jpg)
+
 ## Versionamento semântico
 
 **Versão atual: `1.2.0-beta.1`**, declarada no `pom.xml` e na interface.
@@ -38,7 +40,7 @@ O código recebido tinha a identificação `1.0-alpha`, sem os três números ex
 
 ![Dashboard real do ThinDesk](docs/dashboard.jpg)
 
-A captura corresponde ao código deste repositório. O usuário comum visualiza o total, os chamados abertos e resolvidos, a taxa de resolução e os cinco chamados mais recentes **da sua própria conta**. Administradores visualizam o conjunto de chamados. Os valores vêm do MongoDB e variam conforme o uso.
+Captura de uma conta comum em 24/11/2026, com uma solicitação fictícia criada na validação pelo navegador. A imagem corresponde ao código deste repositório. O usuário comum visualiza o total, os chamados abertos e resolvidos, a taxa de resolução e os cinco chamados mais recentes **da sua própria conta**. Administradores visualizam o conjunto de chamados. Os valores vêm do MongoDB e variam conforme o uso.
 
 Os exemplos fictícios da inicialização são visíveis somente para administradores. O cadastro de um novo usuário começa sem chamados.
 
@@ -114,7 +116,7 @@ A coleção `postman/ThinDesk-Chamados.postman_collection.json` exige que você 
 
 ## Validação e entrega
 
-A rotina de integração cobre cadastro público, validações, nome duplicado, armazenamento de senha com hash, login e logout, perfil comum obrigatório, proteção CSRF, isolamento dos chamados e resolução administrativa. Os resultados ficam em [GitHub Actions](https://github.com/ErickSantosBarbosa04/AleAtt23-10/actions).
+A rotina de integração cobre cadastro público, validações, nome duplicado, armazenamento de senha com hash, login e logout, perfil comum obrigatório, proteção CSRF, isolamento dos chamados e resolução administrativa. A compilação e os três testes de integração passaram em 24/11/2026. Os resultados ficam em [GitHub Actions](https://github.com/ErickSantosBarbosa04/AleAtt23-10/actions/runs/45486522392).
 
 | Requisito da atividade | Entrega |
 | --- | --- |
@@ -123,3 +125,5 @@ A rotina de integração cobre cadastro público, validações, nome duplicado, 
 | Deploy funcionando com login para qualquer pessoa (3 pontos) | Links de acesso e cadastro público no início deste README. |
 
 Baixe o ZIP atualizado da branch `main` para entregar o mesmo código do deploy e da documentação.
+
+A validação no site publicado confirmou dois cadastros independentes, login e logout, persistência do chamado e isolamento dos dados: a segunda conta não visualiza o chamado criado pela primeira.
