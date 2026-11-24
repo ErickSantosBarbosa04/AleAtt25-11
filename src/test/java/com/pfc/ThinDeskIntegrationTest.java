@@ -98,7 +98,7 @@ class ThinDeskIntegrationTest {
                 .andExpect(status().isBadRequest());
         String body = mvc.perform(post("/api/chamados").with(csrf()).session(session).contentType("application/json")
                 .content("{\"titulo\":\"Chamado privado de teste\",\"descricao\":\"Solicitação de exemplo\"}"))
-                .andExpect(status().isCreated()).andExpect(jsonPath("$.usuario").value(alice))
+                .andExpect(status().isCreated()).andExpect(jsonPath("$.solicitante").value(alice))
                 .andReturn().getResponse().getContentAsString();
         JsonNode chamado = json.readTree(body);
         String id = chamado.get("id").asText();
