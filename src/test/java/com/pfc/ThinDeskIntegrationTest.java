@@ -31,6 +31,21 @@ class ThinDeskIntegrationTest {
 
     private String nome() { return "teste_" + UUID.randomUUID().toString().replace("-", "").substring(0,12); }
 
+    @Test
+    void identificadorNativoImpedeSobrescreverUmaConta() {
+        String username = nome();
+        Usuario original = usuarios.cadastrar(username, SENHA, SENHA);
+        Usuario duplicado = new Usuario();
+        duplicado.setUsername(username);
+        duplicado.setPasswordHash(encoder.encode("Outra-senha-2026!"));
+        duplicado.setRole("ADMIN");
+        org.assertj.core.api.Assertions.assertThatThrownBy(() -> repository.insert(duplicado))
+                .isInstanceOf(org.springframework.dao.DuplicateKeyException.class);
+        Usuario preservado = repository.findById(username).orElseThrow();
+        assertThat(preservado.getPasswordHash()).isEqualTo(original.getPasswordHash());
+        assertThat(preservado.getRole()).isEqualTo("USER");
+    }
+
     private MockHttpSession entrar(String username) throws Exception {
         MockHttpSession session = (MockHttpSession) mvc.perform(post("/login").with(csrf())
                 .param("username", username).param("password", SENHA))

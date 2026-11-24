@@ -32,6 +32,6 @@ public class AdminAccountConfig implements CommandLineRunner {
         admin.setUsername(normalized);
         admin.setPasswordHash(encoder.encode(password));
         admin.setRole("ADMIN");
-        usuarios.save(admin);
+        usuarios.insert(admin);
     }
 }

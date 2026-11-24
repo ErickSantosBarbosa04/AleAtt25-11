@@ -15,7 +15,7 @@ Qualquer pessoa pode criar uma conta comum, sem aprovação manual e sem conta n
 
 Cada cadastro público recebe exclusivamente o perfil **USER (usuário comum)**. A pessoa pode abrir chamados e acompanhar apenas os seus próprios registros. O dashboard também é individual. A resolução de chamados e a consulta de clientes são funções administrativas.
 
-As contas são persistidas no MongoDB. As senhas são armazenadas como hashes BCrypt; senhas e confirmação não são exibidas após o cadastro. Nomes de usuário são normalizados para minúsculas e protegidos por índice único. O cadastro não aceita a escolha de perfil administrativo.
+As contas são persistidas no MongoDB. As senhas são armazenadas como hashes BCrypt; senhas e confirmação não são exibidas após o cadastro. Nomes de usuário são normalizados para minúsculas e usados como identificador único do MongoDB. A gravação por inserção impede que um cadastro substitua uma conta existente. O cadastro não aceita a escolha de perfil administrativo.
 
 Este é um projeto acadêmico: utilize apenas dados fictícios nos chamados.
 
@@ -93,6 +93,7 @@ O Railway acompanha a branch `main` deste repositório. O `Dockerfile` compila o
 | `ADMIN_PASSWORD` | Opcional: segredo da conta administrativa, definido na hospedagem. Não há valor padrão. |
 
 A conta administrativa só é criada quando as duas variáveis opcionais estão configuradas e o nome ainda não existe. Uma conta comum existente nunca é promovida por essa rotina. A senha administrativa deve ter pelo menos 12 caracteres e no máximo 72 bytes. O cadastro público não depende dessas variáveis.
+
 
 A disponibilidade depende da manutenção dos serviços e dos limites/créditos da conta Railway.
 

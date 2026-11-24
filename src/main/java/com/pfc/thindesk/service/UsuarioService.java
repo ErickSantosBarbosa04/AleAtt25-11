@@ -37,7 +37,7 @@ public class UsuarioService {
         usuario.setPasswordHash(encoder.encode(password));
         usuario.setRole("USER");
         try {
-            return repository.save(usuario);
+            return repository.insert(usuario);
         } catch (DuplicateKeyException ex) {
             throw new IllegalArgumentException("Esse usuário já existe. Escolha outro nome.");
         }
