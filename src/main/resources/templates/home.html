@@ -1,6 +1,15 @@
-<div class="container-fluid vh-100 d-flex justify-content-center align-items-center" th:fragment="content">
-    <div class="text-center">
-        <h1>Bem-vindo ao</h1>
-        <img th:src="@{/images/logo.png}" alt="Logo" width="500" height="500">
-    </div>
+<!DOCTYPE html><html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"><body><section th:fragment="content">
+<header class="page-head"><div><div class="eyebrow">Central de suporte</div><h1>Dashboard de chamados</h1><p class="muted">Acompanhe as solicita��es e os resultados do atendimento.</p></div><a class="button" th:href="@{/chamados#novo}">Abrir chamado</a></header>
+<div class="stats" aria-label="Indicadores de chamados">
+<article class="stat"><p>Total de chamados</p><strong th:text="${total}">0</strong><small>Solicita��es registradas</small></article>
+<article class="stat"><p>Em aberto</p><strong th:text="${abertos}">0</strong><small>Aguardando resolu��o</small></article>
+<article class="stat"><p>Resolvidos</p><strong th:text="${resolvidos}">0</strong><small>Atendimentos conclu�dos</small></article>
+<article class="stat"><p>Taxa de resolu��o</p><strong th:text="${taxaResolucao + '%'}">0%</strong><small>Resolvidos sobre o total</small></article>
 </div>
+<section class="panel"><div class="panel-head"><div><h2>Chamados recentes</h2><p class="muted">As cinco solicita��es mais recentes.</p></div><a th:href="@{/chamados}">Ver todos os chamados</a></div>
+<div class="table-wrap"><table><thead><tr><th scope="col">Solicita��o</th><th scope="col">Solicitante</th><th scope="col">Status</th><th scope="col">Abertura</th></tr></thead><tbody>
+<tr th:each="chamado : ${recentes}"><td><strong th:text="${chamado.titulo ?: 'Chamado t�cnico'}"></strong><small th:text="${chamado.descricao}"></small></td><td th:text="${chamado.usuario}"></td><td><span class="status" th:classappend="${chamado.status == 'RESOLVIDO' ? 'done' : ''}" th:text="${chamado.status}"></span></td><td th:text="${chamado.dataAbertura != null ? #temporals.format(chamado.dataAbertura.atZone(T(java.time.ZoneId).of('America/Sao_Paulo')), 'dd/MM/yyyy HH:mm') : '-'}"></td></tr>
+<tr th:if="${#lists.isEmpty(recentes)}"><td colspan="4" class="empty">Nenhum chamado registrado. Abra a primeira solicita��o.</td></tr>
+</tbody></table></div></section>
+<p class="note">Demonstra��o acad�mica com acesso compartilhado. Os exemplos identificados como fict�cios s�o gravados apenas quando o banco est� vazio. Os indicadores refletem os registros atuais do banco.</p>
+</section></body></html>

@@ -1,0 +1,5 @@
+.git
+target
+docs
+*.zip
+.env

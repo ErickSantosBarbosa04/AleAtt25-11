@@ -1,0 +1,22 @@
+name: Verificar ThinDesk
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    services:
+      mongo:
+        image: mongo:8.0
+        ports: ['27017:27017']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - name: Compilar, testar e gerar JAR execut�vel
+        env:
+          MONGODB_URI: mongodb://localhost:27017/thindesk_test
+        run: mvn -B verify

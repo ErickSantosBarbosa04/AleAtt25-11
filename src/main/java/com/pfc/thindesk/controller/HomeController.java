@@ -36,8 +36,19 @@ public class HomeController {
     public ModelAndView home() {
         ModelAndView modelAndView = new ModelAndView("layout");
         String fragment = "home :: content";
-        log.info("Carregando fragmento: {}", fragment); // Log para depuração
+        log.info("Carregando fragmento: {}", fragment); // Log para depura��o
         modelAndView.addObject("content", fragment);
+        List<Chamado> chamados = chamadoService.listarChamados();
+        long abertos = chamados.stream().filter(c -> "ABERTO".equals(c.getStatus())).count();
+        long resolvidos = chamados.stream().filter(c -> "RESOLVIDO".equals(c.getStatus())).count();
+        modelAndView.addObject("total", chamados.size());
+        modelAndView.addObject("abertos", abertos);
+        modelAndView.addObject("resolvidos", resolvidos);
+        modelAndView.addObject("taxaResolucao", chamados.isEmpty() ? 0 : Math.round(100.0 * resolvidos / chamados.size()));
+        modelAndView.addObject("recentes", chamados.stream()
+                .sorted(java.util.Comparator.comparing(Chamado::getDataAbertura,
+                        java.util.Comparator.nullsLast(java.util.Comparator.reverseOrder())))
+                .limit(5).toList());
         return modelAndView;
     }
 
@@ -46,7 +57,7 @@ public class HomeController {
         List<Chamado> chamados = chamadoService.listarChamados();
         model.addAttribute("chamados", chamados); // Passa a lista para o modelo
         String fragment = "chamados :: content";
-        log.info("Carregando fragmento: {}", fragment); // Log para depuração
+        log.info("Carregando fragmento: {}", fragment); // Log para depura��o
         model.addAttribute("content", fragment);
         return "chamados";
     }
@@ -56,7 +67,7 @@ public class HomeController {
         List<Cliente> clientes = clienteService.listarClientes();
         model.addAttribute("clientes", clientes);
         String fragment = "clientes :: content";
-        log.info("Carregando fragmento: {}", fragment); // Log para depuração
+        log.info("Carregando fragmento: {}", fragment); // Log para depura��o
         model.addAttribute("content", fragment);
         return "clientes";
     }
@@ -66,7 +77,7 @@ public class HomeController {
         List<HorarioAtendimento> horarios = horarioAtendimentoService.listarTodos();
         model.addAttribute("ajustes-horarios", horarios);
         String fragment = "ajustes-horarios :: content";
-        log.info("Carregando fragmento: {}", fragment); // Log para depuração
+        log.info("Carregando fragmento: {}", fragment); // Log para depura��o
         model.addAttribute("content", fragment);
         return "ajustes-horarios";
     }
