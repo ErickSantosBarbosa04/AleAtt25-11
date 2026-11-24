@@ -116,7 +116,7 @@ A coleção `postman/ThinDesk-Chamados.postman_collection.json` exige que você 
 
 ## Validação e entrega
 
-A rotina de integração cobre cadastro público, validações, nome duplicado, armazenamento de senha com hash, login e logout, perfil comum obrigatório, proteção CSRF, isolamento dos chamados e resolução administrativa. A compilação e os três testes de integração passaram em 24/11/2026. Os resultados ficam em [GitHub Actions](https://github.com/ErickSantosBarbosa04/AleAtt23-10/actions/runs/45486522392).
+A rotina de integração cobre cadastro público, validações, nome duplicado, armazenamento de senha com hash, login e logout, perfil comum obrigatório, proteção CSRF, isolamento dos chamados e resolução administrativa. A compilação e os três testes de integração passaram em 24/11/2026. Os resultados ficam em [GitHub Actions](https://github.com/ErickSantosBarbosa04/AleAtt25-11/actions/runs/45486522392).
 
 | Requisito da atividade | Entrega |
 | --- | --- |
