@@ -16,7 +16,7 @@ jobs:
           distribution: temurin
           java-version: '21'
           cache: maven
-      - name: Compilar, testar e gerar JAR execut�vel
+      - name: Compilar, testar e gerar JAR executável
         env:
           MONGODB_URI: mongodb://localhost:27017/thindesk_test
         run: mvn -B verify

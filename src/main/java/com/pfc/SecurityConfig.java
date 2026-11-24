@@ -17,8 +17,8 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/login", "/css/**", "/dist/**", "/plugins/**", "/js/**", "/images/**").permitAll() // Permitir acesso � p�gina de login e arquivos est�ticos
-                .anyRequest().authenticated() // Exigir autentica��o para qualquer outra p�gina
+                .requestMatchers("/login", "/css/**", "/dist/**", "/plugins/**", "/js/**", "/images/**").permitAll() // Permitir acesso à página de login e arquivos estáticos
+                .anyRequest().authenticated() // Exigir autenticação para qualquer outra página
             )
             .exceptionHandling(exceptions -> exceptions
                 .defaultAuthenticationEntryPointFor(
@@ -27,13 +27,13 @@ public class SecurityConfig {
                 )
             )
             .formLogin(form -> form
-                .loginPage("/login") // Definir a URL da p�gina de login personalizada
-                .defaultSuccessUrl("/", true) // Redirecionar para /home ap�s login bem-sucedido
-                .permitAll() // Permitir que todos acessem a p�gina de login
+                .loginPage("/login") // Definir a URL da página de login personalizada
+                .defaultSuccessUrl("/", true) // Redirecionar para /home após login bem-sucedido
+                .permitAll() // Permitir que todos acessem a página de login
             )
             .logout(logout -> logout
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/login?logout") // Redirecionar para o login ap�s logout
+                .logoutSuccessUrl("/login?logout") // Redirecionar para o login após logout
             );
         return http.build();
     }

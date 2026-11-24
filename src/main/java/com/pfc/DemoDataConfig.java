@@ -23,9 +23,9 @@ public class DemoDataConfig implements CommandLineRunner {
     @Override
     public void run(String... args) {
         if (repository.count() != 0) return;
-        service.abrirChamado(new AbrirChamadoRequest("Impressora sem conex�o", "Exemplo fict�cio: impressora do setor financeiro n�o conecta � rede."), "demo");
-        service.abrirChamado(new AbrirChamadoRequest("Acesso ao sistema corporativo", "Exemplo fict�cio: usu�rio solicita verifica��o de acesso ao sistema."), "demo");
-        Chamado resolvido = service.abrirChamado(new AbrirChamadoRequest("Atualiza��o de esta��o de trabalho", "Exemplo fict�cio: atualizar os aplicativos da esta��o de atendimento."), "demo");
+        service.abrirChamado(new AbrirChamadoRequest("Impressora sem conexão", "Exemplo fictício: impressora do setor financeiro não conecta à rede."), "demo");
+        service.abrirChamado(new AbrirChamadoRequest("Acesso ao sistema corporativo", "Exemplo fictício: usuário solicita verificação de acesso ao sistema."), "demo");
+        Chamado resolvido = service.abrirChamado(new AbrirChamadoRequest("Atualização de estação de trabalho", "Exemplo fictício: atualizar os aplicativos da estação de atendimento."), "demo");
         service.resolverChamado(resolvido.getId(), new ResolucaoChamadoRequest("Aplicativos atualizados e funcionamento validado."), "demo");
     }
 }

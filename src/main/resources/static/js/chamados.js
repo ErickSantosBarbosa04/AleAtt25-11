@@ -7,8 +7,8 @@ async function enviar(url, method, dados, form) {
     const response = await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(dados) });
     if (response.status === 401) { window.location.assign('/login'); return; }
     if (!response.ok) {
-      const messages = {400:'Preencha os campos obrigat�rios.',404:'Chamado n�o encontrado. Atualize a p�gina.',409:'Este chamado j� foi resolvido. Atualize a p�gina.'};
-      throw new Error(messages[response.status] || 'N�o foi poss�vel salvar. Tente novamente.');
+      const messages = {400:'Preencha os campos obrigatórios.',404:'Chamado não encontrado. Atualize a página.',409:'Este chamado já foi resolvido. Atualize a página.'};
+      throw new Error(messages[response.status] || 'Não foi possível salvar. Tente novamente.');
     }
     window.location.assign('/chamados');
   } catch(error) { message.textContent = error.message; message.hidden = false; button.disabled = false; }

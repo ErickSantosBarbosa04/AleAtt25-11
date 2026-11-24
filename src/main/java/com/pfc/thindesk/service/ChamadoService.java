@@ -35,10 +35,10 @@ public class ChamadoService {
 
     public Chamado abrirChamado(AbrirChamadoRequest request, String solicitante) {
         if (request == null || request.titulo() == null || request.titulo().isBlank()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O t�tulo � obrigat�rio.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O título é obrigatório.");
         }
         if (request.descricao() == null || request.descricao().isBlank()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A descri��o � obrigat�ria.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A descrição é obrigatória.");
         }
 
         Chamado chamado = new Chamado();
@@ -56,12 +56,12 @@ public class ChamadoService {
 
     public Chamado consultarChamado(String id) {
         return chamadoRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Chamado n�o encontrado."));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Chamado não encontrado."));
     }
 
     public Chamado resolverChamado(String id, ResolucaoChamadoRequest request, String tecnico) {
         if (request == null || request.solucao() == null || request.solucao().isBlank()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A solu��o aplicada � obrigat�ria.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A solução aplicada é obrigatória.");
         }
 
         Instant dataResolucao = Instant.now();
@@ -85,6 +85,6 @@ public class ChamadoService {
         if (chamadoRepository.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Somente chamados ABERTOS podem ser resolvidos.");
         }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Chamado n�o encontrado.");
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Chamado não encontrado.");
     }
 }

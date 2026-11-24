@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "ThinDesk - Chamados",
-    "description": "Fluxo da API de chamados. Envie primeiro a requisi��o Entrar; o Postman guarda o cookie de sess�o do login existente. O nome de usu�rio autenticado � registrado como solicitante e � usado no endpoint /usuario/{id}.",
+    "description": "Fluxo da API de chamados. Envie primeiro a requisição Entrar; o Postman guarda o cookie de sessão do login existente. O nome de usuário autenticado é registrado como solicitante e é usado no endpoint /usuario/{id}.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -24,7 +24,7 @@
           ]
         },
         "url": "{{baseUrl}}/login",
-        "description": "Autentica com o login j� existente no ThinDesk. O cookie JSESSIONID � reutilizado pelas pr�ximas requisi��es."
+        "description": "Autentica com o login já existente no ThinDesk. O cookie JSESSIONID é reutilizado pelas próximas requisições."
       }
     },
     {
@@ -52,15 +52,15 @@
         "header": [{ "key": "Content-Type", "value": "application/json" }],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"titulo\": \"Computador sem acesso � rede\",\n  \"descricao\": \"A esta��o do setor financeiro n�o consegue acessar a rede.\"\n}",
+          "raw": "{\n  \"titulo\": \"Computador sem acesso à rede\",\n  \"descricao\": \"A estação do setor financeiro não consegue acessar a rede.\"\n}",
           "options": { "raw": { "language": "json" } }
         },
         "url": "{{baseUrl}}/api/chamados",
-        "description": "O solicitante, a data de abertura e o status s�o definidos pelo servi�o."
+        "description": "O solicitante, a data de abertura e o status são definidos pelo serviço."
       }
     },
     {
-      "name": "3. Listar chamados do usu�rio",
+      "name": "3. Listar chamados do usuário",
       "event": [
         {
           "listen": "test",
@@ -90,7 +90,7 @@
           "script": {
             "type": "text/javascript",
             "exec": [
-              "pm.test('Detalhes do chamado aberto est�o persistidos', function () {",
+              "pm.test('Detalhes do chamado aberto estão persistidos', function () {",
               "    pm.response.to.have.status(200);",
               "    const chamado = pm.response.json();",
               "    pm.expect(chamado.id).to.eql(pm.collectionVariables.get('chamadoId'));",
@@ -114,7 +114,7 @@
           "script": {
             "type": "text/javascript",
             "exec": [
-              "pm.test('Chamado resolvido com solu��o e data', function () {",
+              "pm.test('Chamado resolvido com solução e data', function () {",
               "    pm.response.to.have.status(200);",
               "    const chamado = pm.response.json();",
               "    pm.expect(chamado.status).to.eql('RESOLVIDO');",
@@ -138,7 +138,7 @@
       }
     },
     {
-      "name": "6. Confirmar resolu��o persistida",
+      "name": "6. Confirmar resolução persistida",
       "event": [
         {
           "listen": "test",
@@ -163,14 +163,14 @@
       }
     },
     {
-      "name": "7. Bloquear nova resolu��o",
+      "name": "7. Bloquear nova resolução",
       "event": [
         {
           "listen": "test",
           "script": {
             "type": "text/javascript",
             "exec": [
-              "pm.test('Chamado resolvido n�o pode ser alterado novamente', function () {",
+              "pm.test('Chamado resolvido não pode ser alterado novamente', function () {",
               "    pm.response.to.have.status(409);",
               "});"
             ]
@@ -182,7 +182,7 @@
         "header": [{ "key": "Content-Type", "value": "application/json" }],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"solucao\": \"Tentativa de alterar ap�s resolu��o.\"\n}",
+          "raw": "{\n  \"solucao\": \"Tentativa de alterar após resolução.\"\n}",
           "options": { "raw": { "language": "json" } }
         },
         "url": "{{baseUrl}}/api/chamados/{{chamadoId}}/resolver"

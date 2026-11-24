@@ -34,7 +34,7 @@ class ThinDeskIntegrationTest {
                 .content("{\"titulo\":\"\",\"descricao\":\"teste\"}"))
                 .andExpect(status().isBadRequest());
         String body = mvc.perform(post("/api/chamados").session(session).contentType("application/json")
-                .content("{\"titulo\":\"Teste automatizado\",\"descricao\":\"Verifica��o do ciclo de atendimento\"}"))
+                .content("{\"titulo\":\"Teste automatizado\",\"descricao\":\"Verificação do ciclo de atendimento\"}"))
                 .andExpect(status().isCreated()).andExpect(jsonPath("$.status").value("ABERTO"))
                 .andReturn().getResponse().getContentAsString();
         JsonNode chamado = json.readTree(body);
