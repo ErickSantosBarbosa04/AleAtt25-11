@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/chamados")
@@ -41,15 +43,18 @@ public class ChamadoController {
     }
 
     @GetMapping("/usuario/{id}")
-    public List<ChamadoResponse> listarChamadosDoUsuario(@PathVariable("id") String id) {
+    public List<ChamadoResponse> listarChamadosDoUsuario(@PathVariable("id") String id, Authentication authentication) {
+        exigirProprietario(id, authentication);
         return chamadoService.listarChamadosDoUsuario(id).stream()
                 .map(ChamadoController::toResponse)
                 .toList();
     }
 
     @GetMapping("/{id}")
-    public ChamadoResponse consultarChamado(@PathVariable("id") String id) {
-        return toResponse(chamadoService.consultarChamado(id));
+    public ChamadoResponse consultarChamado(@PathVariable("id") String id, Authentication authentication) {
+        Chamado chamado = chamadoService.consultarChamado(id);
+        exigirProprietario(chamado.getUsuario(), authentication);
+        return toResponse(chamado);
     }
 
     @PutMapping("/{id}/resolver")
@@ -58,6 +63,13 @@ public class ChamadoController {
             @RequestBody ResolucaoChamadoRequest request,
             Authentication authentication) {
         return toResponse(chamadoService.resolverChamado(id, request, authentication.getName()));
+    }
+
+    private static void exigirProprietario(String usuario, Authentication authentication) {
+        boolean admin = authentication.getAuthorities().stream()
+                .anyMatch(a -> "ROLE_ADMIN".equals(a.getAuthority()));
+        if (!admin && !authentication.getName().equals(usuario))
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Acesso permitido somente aos seus chamados.");
     }
 
     private static ChamadoResponse toResponse(Chamado chamado) {

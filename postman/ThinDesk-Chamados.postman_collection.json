@@ -1,31 +1,98 @@
 {
   "info": {
     "name": "ThinDesk - Chamados",
-    "description": "Fluxo da API de chamados. Envie primeiro a requisição Entrar; o Postman guarda o cookie de sessão do login existente. O nome de usuário autenticado é registrado como solicitante e é usado no endpoint /usuario/{id}.",
+    "description": "Cadastre uma conta em /cadastro. Preencha username e password com sua própria conta. As rotas de resolução exigem perfil ADMIN. O primeiro GET /login captura o token CSRF e o cookie de sessão.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
-    { "key": "baseUrl", "value": "http://localhost:8080" },
-    { "key": "username", "value": "admin" },
-    { "key": "password", "value": "thindesk" },
-    { "key": "chamadoId", "value": "" }
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "username",
+      "value": ""
+    },
+    {
+      "key": "password",
+      "value": ""
+    },
+    {
+      "key": "chamadoId",
+      "value": ""
+    },
+    {
+      "key": "csrfToken",
+      "value": ""
+    }
   ],
   "item": [
+    {
+      "name": "0. Obter token CSRF",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/login"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const match = pm.response.text().match(/name=\"_csrf\"[^>]*value=\"([^\"]+)\"/);",
+              "if (match) pm.collectionVariables.set('csrfToken', match[1]);"
+            ]
+          }
+        }
+      ]
+    },
     {
       "name": "1. Entrar",
       "request": {
         "method": "POST",
-        "header": [],
+        "header": [
+          {
+            "key": "X-CSRF-TOKEN",
+            "value": "{{csrfToken}}"
+          }
+        ],
         "body": {
           "mode": "urlencoded",
           "urlencoded": [
-            { "key": "username", "value": "{{username}}", "type": "text" },
-            { "key": "password", "value": "{{password}}", "type": "text" }
+            {
+              "key": "username",
+              "value": "{{username}}",
+              "type": "text"
+            },
+            {
+              "key": "password",
+              "value": "{{password}}",
+              "type": "text"
+            }
           ]
         },
         "url": "{{baseUrl}}/login",
         "description": "Autentica com o login já existente no ThinDesk. O cookie JSESSIONID é reutilizado pelas próximas requisições."
       }
+    },
+    {
+      "name": "1b. Renovar token CSRF após login",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/login"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const match = pm.response.text().match(/name=\"_csrf\"[^>]*value=\"([^\"]+)\"/);",
+              "if (match) pm.collectionVariables.set('csrfToken', match[1]);"
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "2. Abrir chamado",
@@ -49,11 +116,24 @@
       ],
       "request": {
         "method": "POST",
-        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-CSRF-TOKEN",
+            "value": "{{csrfToken}}"
+          }
+        ],
         "body": {
           "mode": "raw",
           "raw": "{\n  \"titulo\": \"Computador sem acesso à rede\",\n  \"descricao\": \"A estação do setor financeiro não consegue acessar a rede.\"\n}",
-          "options": { "raw": { "language": "json" } }
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
         },
         "url": "{{baseUrl}}/api/chamados",
         "description": "O solicitante, a data de abertura e o status são definidos pelo serviço."
@@ -128,11 +208,24 @@
       ],
       "request": {
         "method": "PUT",
-        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-CSRF-TOKEN",
+            "value": "{{csrfToken}}"
+          }
+        ],
         "body": {
           "mode": "raw",
           "raw": "{\n  \"solucao\": \"Reiniciada a interface de rede e validado o acesso.\"\n}",
-          "options": { "raw": { "language": "json" } }
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
         },
         "url": "{{baseUrl}}/api/chamados/{{chamadoId}}/resolver"
       }
@@ -179,11 +272,24 @@
       ],
       "request": {
         "method": "PUT",
-        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-CSRF-TOKEN",
+            "value": "{{csrfToken}}"
+          }
+        ],
         "body": {
           "mode": "raw",
           "raw": "{\n  \"solucao\": \"Tentativa de alterar após resolução.\"\n}",
-          "options": { "raw": { "language": "json" } }
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
         },
         "url": "{{baseUrl}}/api/chamados/{{chamadoId}}/resolver"
       }

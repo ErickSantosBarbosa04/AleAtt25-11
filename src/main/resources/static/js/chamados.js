@@ -4,10 +4,12 @@ async function enviar(url, method, dados, form) {
   button.disabled = true;
   message.hidden = true;
   try {
-    const response = await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(dados) });
+    const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
+    const response = await fetch(url, { method, headers: { 'Content-Type': 'application/json', [csrfHeader]:csrfToken }, body: JSON.stringify(dados) });
     if (response.status === 401) { window.location.assign('/login'); return; }
     if (!response.ok) {
-      const messages = {400:'Preencha os campos obrigatórios.',404:'Chamado não encontrado. Atualize a página.',409:'Este chamado já foi resolvido. Atualize a página.'};
+      const messages = {400:'Preencha os campos obrigatórios.',403:'Acesso não permitido ou sessão expirada. Entre novamente.',404:'Chamado não encontrado. Atualize a página.',409:'Este chamado já foi resolvido. Atualize a página.'};
       throw new Error(messages[response.status] || 'Não foi possível salvar. Tente novamente.');
     }
     window.location.assign('/chamados');

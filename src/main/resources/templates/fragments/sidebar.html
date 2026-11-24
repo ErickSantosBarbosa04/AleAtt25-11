@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"><body>
 <aside class="side" th:fragment="sidebar">
 <a class="brand" th:href="@{/}">ThinDesk<small>Central de atendimento técnico</small></a>
-<nav aria-label="Menu principal"><a th:href="@{/}">Dashboard</a><a th:href="@{/chamados}">Chamados</a><a th:href="@{/clientes}">Clientes</a></nav>
-<footer>Versão 1.1.0-beta.1<br>Ambiente de demonstração<form th:action="@{/logout}" method="post"><button type="submit">Sair</button></form></footer>
+<nav aria-label="Menu principal"><a th:href="@{/}">Dashboard</a><a th:href="@{/chamados}">Chamados</a><a th:if="${isAdmin}" th:href="@{/clientes}">Clientes</a></nav>
+<footer>Versão 1.2.0-beta.1<br><span th:text="${isAdmin ? 'Administrador' : 'Usuário comum'}"></span><br><span th:text="${currentUsername}"></span><form th:action="@{/logout}" method="post"><button type="submit">Sair</button></form></footer>
 </aside></body></html>

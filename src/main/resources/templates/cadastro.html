@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Criar conta | ThinDesk</title><link rel="stylesheet" th:href="@{/css/dashboard.css}"></head>
+<body class="login-body"><main class="login-card">
+<a class="brand" th:href="@{/login}">ThinDesk</a><h1>Crie sua conta</h1><p class="muted">Abra e acompanhe seus chamados técnicos.</p>
+<p class="error" th:if="${erro}" th:text="${erro}" role="alert"></p>
+<form th:action="@{/cadastro}" method="post">
+<label for="username">Usuário</label><input id="username" name="username" th:value="${username}" autocomplete="username" minlength="3" maxlength="30" pattern="[A-Za-z0-9._-]{3,30}" aria-describedby="username-help" required>
+<p class="muted" id="username-help">De 3 a 30 caracteres: letras, números, ponto, traço ou sublinhado.</p>
+<label for="password">Senha</label><input type="password" id="password" name="password" autocomplete="new-password" minlength="8" maxlength="64" aria-describedby="password-help" required>
+<p class="muted" id="password-help">De 8 a 64 caracteres. Escolha uma senha exclusiva para sua conta.</p>
+<label for="confirmation">Confirmar senha</label><input type="password" id="confirmation" name="confirmation" autocomplete="new-password" minlength="8" maxlength="64" required>
+<button type="submit">Criar minha conta</button></form>
+<p>Já tem uma conta? <a th:href="@{/login}">Entrar</a></p>
+<p class="note">Seu cadastro cria um usuário comum. Você poderá abrir e consultar seus próprios chamados.</p>
+<p class="muted">Versão 1.2.0-beta.1 · Projeto acadêmico</p>
+</main></body></html>

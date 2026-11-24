@@ -9,6 +9,7 @@ import com.pfc.thindesk.service.ClienteService;
 import com.pfc.thindesk.service.ChamadoService;
 import com.pfc.thindesk.service.HorarioAtendimentoService;
 import java.util.List;
+import org.springframework.security.core.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,12 +34,12 @@ public class HomeController {
     }
 
     @GetMapping("/")
-    public ModelAndView home() {
+    public ModelAndView home(Authentication authentication) {
         ModelAndView modelAndView = new ModelAndView("layout");
         String fragment = "home :: content";
         log.info("Carregando fragmento: {}", fragment); // Log para depuração
         modelAndView.addObject("content", fragment);
-        List<Chamado> chamados = chamadoService.listarChamados();
+        List<Chamado> chamados = listarVisiveis(authentication);
         long abertos = chamados.stream().filter(c -> "ABERTO".equals(c.getStatus())).count();
         long resolvidos = chamados.stream().filter(c -> "RESOLVIDO".equals(c.getStatus())).count();
         modelAndView.addObject("total", chamados.size());
@@ -53,13 +54,20 @@ public class HomeController {
     }
 
     @GetMapping("/chamados")
-    public String chamados(Model model) {
-        List<Chamado> chamados = chamadoService.listarChamados();
+    public String chamados(Model model, Authentication authentication) {
+        List<Chamado> chamados = listarVisiveis(authentication);
         model.addAttribute("chamados", chamados); // Passa a lista para o modelo
         String fragment = "chamados :: content";
         log.info("Carregando fragmento: {}", fragment); // Log para depuração
         model.addAttribute("content", fragment);
         return "chamados";
+    }
+
+    private List<Chamado> listarVisiveis(Authentication authentication) {
+        boolean admin = authentication.getAuthorities().stream()
+                .anyMatch(a -> "ROLE_ADMIN".equals(a.getAuthority()));
+        return admin ? chamadoService.listarChamados()
+                : chamadoService.listarChamadosDoUsuario(authentication.getName());
     }
 
     @GetMapping("/clientes")
