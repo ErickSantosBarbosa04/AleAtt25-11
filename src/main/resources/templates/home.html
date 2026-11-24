@@ -11,5 +11,5 @@
 <tr th:each="chamado : ${recentes}"><td><strong th:text="${chamado.titulo ?: 'Chamado técnico'}"></strong><small th:text="${chamado.descricao}"></small></td><td th:text="${chamado.usuario}"></td><td><span class="status" th:classappend="${chamado.status == 'RESOLVIDO' ? 'done' : ''}" th:text="${chamado.status}"></span></td><td th:text="${chamado.dataAbertura != null ? #temporals.format(chamado.dataAbertura.atZone(T(java.time.ZoneId).of('America/Sao_Paulo')), 'dd/MM/yyyy HH:mm') : '—'}"></td></tr>
 <tr th:if="${#lists.isEmpty(recentes)}"><td colspan="4" class="empty">Nenhum chamado registrado. Abra a primeira solicitação.</td></tr>
 </tbody></table></div></section>
-<p class="note">Os indicadores mostram os chamados da sua conta. Administradores acompanham todos os chamados. Projeto acadêmico: use apenas dados fictícios.</p>
+<p class="note">Os indicadores mostram os chamados da sua conta.</p>
 </section></body></html>
